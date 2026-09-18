@@ -109,6 +109,7 @@ class MsiPanelProvider extends PanelProvider
             ->pages([Dashboard::class])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets($widgets)
+            ->globalSearch(false)
             ->renderHook(
                 PanelsRenderHook::FOOTER,
                 fn() => view('footer')

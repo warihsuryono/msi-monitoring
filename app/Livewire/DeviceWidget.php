@@ -16,6 +16,10 @@ class DeviceWidget extends StatsOverviewWidget
     {
         $this->device_id = $device_id;
     }
+    protected function getColumns(): int
+    {
+        return 4;
+    }
     protected function getStats(): array
     {
         $stats = [];
@@ -35,11 +39,8 @@ class DeviceWidget extends StatsOverviewWidget
                 ->latest('id')
                 ->first();
 
-            $stats[] = Stat::make(
-                $param->parameter_id,
-                $value ? round($value->value) : '-'
-            )
-                ->label(new HtmlString("<p class='text-lg font-black'>{$param->parameter->name}</p>"))
+            $stats[] = Stat::make($param->parameter_id, $value ? round($value->value) : '-')
+                ->label(new HtmlString("<p class='text-lg font-black'>{$param->parameter->caption}</p>"))
                 ->description($param->parameter->unit->name);
         }
 
