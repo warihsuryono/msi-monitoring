@@ -93,7 +93,8 @@ class Dashboard extends Page
 
     public function getTitle(): string | Htmlable
     {
-        return static::$title ?? __('filament-panels::pages/dashboard.title');
+        // return static::$title ?? __('filament-panels::pages/dashboard.title');
+        return "";
     }
 
     public function content(Schema $schema): Schema

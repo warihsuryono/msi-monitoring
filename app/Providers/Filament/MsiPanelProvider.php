@@ -91,6 +91,7 @@ class MsiPanelProvider extends PanelProvider
                 FilamentApexChartsPlugin::make()
             ])
             ->default()
+            ->darkMode(false)
             ->id('msi')
             ->path('msi')
             ->favicon(asset('img/monitoring_msi_icon.png'))

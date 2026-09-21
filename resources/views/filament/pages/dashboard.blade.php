@@ -1,6 +1,7 @@
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @php
     use App\Livewire\DeviceWidget;
+    use App\Livewire\UnitToggle;
     use App\Models\Device;
 @endphp
 @if (Device::first())
@@ -13,19 +14,21 @@
                 </x-filament::tabs.item>
             @endforeach
         </x-filament::tabs>
-        <div>
-            @foreach (Device::all() as $device)
-                <div x-show="activeTab === 'device_{{ $device->id }}'">
-                    @foreach ($this->p_types as $p_type)
-                        @if ($this->i_param[$p_type][$device->id] > 0)
-                            <br>
-                            <h1 class="stat-subtitle"><b>{{ ucwords($p_type) }}</b></h1><br>
-                            <div>@livewire(DeviceWidget::class, [$device->id, $p_type])</div>
+
+        @foreach (Device::all() as $device)
+            <div x-show="activeTab === 'device_{{ $device->id }}'">
+                @foreach ($this->p_types as $p_type)
+                    @if ($this->i_param[$p_type][$device->id] > 0)
+                        <br>
+                        <h1 class="stat-subtitle"><b>{{ ucwords($p_type) }}</b></h1><br>
+                        @if ($p_type == 'gas')
+                            @livewire(UnitToggle::class, [$device->id])
                         @endif
-                    @endforeach
-                </div>
-            @endforeach
-        </div>
+                        <div>@livewire(DeviceWidget::class, [$device->id, $p_type])</div>
+                    @endif
+                @endforeach
+            </div>
+        @endforeach
     </x-filament-panels::page>
 @else
     <x-filament-panels::page>

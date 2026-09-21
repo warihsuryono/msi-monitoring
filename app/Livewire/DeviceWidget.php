@@ -3,7 +3,9 @@
 namespace App\Livewire;
 
 use App\Models\AnalyzerValue;
+use App\Models\Device;
 use App\Models\DeviceParameter;
+use App\Models\Parameter;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\HtmlString;
@@ -23,6 +25,24 @@ class DeviceWidget extends StatsOverviewWidget
         return 4;
     }
 
+    public function get_value($parameter_id)
+    {
+        $value = round(@AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $parameter_id])->latest('id')->first()->value, 2);
+        $unit_state = (int) Device::find($this->device_id)->unit_state;
+        $molecular_mass = (float) @Parameter::find($parameter_id)->first()->molecular_mass;
+        if ($unit_state == 1 || $unit_state == 2) $value = round((24.45 * $value) / $molecular_mass, 3);
+        if ($unit_state == 2) $value = round($value / 1000, 3);
+        return $value;
+    }
+
+    public function get_unit()
+    {
+        $unit_state = (int) Device::find($this->device_id)->unit_state;
+        if ($unit_state == 0) return "µg/m<sup>3</sup>";
+        if ($unit_state == 1) return "ppb";
+        if ($unit_state == 2) return "ppm";
+    }
+
     protected function getStats(): array
     {
         $stats = [];
@@ -33,12 +53,19 @@ class DeviceWidget extends StatsOverviewWidget
 
         foreach ($device_parameters as $param) {
 
-            $value = AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first();
+            if ($this->p_type == 'gas') {
+                $value = $this->get_value($param->parameter_id);
+                $unit = $this->get_unit();
+            } else {
+                $value = AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first();
+                $unit = $param->parameter->unit->name;
+            }
+
             $stats[] = Stat::make(
                 $param->parameter_id,
                 new HtmlString(
-                    $value ? round($value->value) : '-' . " " .
-                        "<a class='fi-wi-stats-overview-stat-unit'>" . $param->parameter->unit->name . "</a>"
+                    $value . " " .
+                        "<a class='fi-wi-stats-overview-stat-unit'>" . $unit . "</a>"
                 )
             )
                 ->label(new HtmlString("<p class='text-lg font-black'>" . $param->parameter->caption . "</p>"))

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable()->default('');
             $table->string('topic')->nullable()->default('');
             $table->unsignedBigInteger('device_type_id')->default(0)->nullable();
+            $table->smallInteger('unit_state')->nullable()->default(0);
             $table->smallInteger('status')->nullable()->default(0);
             $table->string('address')->nullable()->default('');
             $table->string('latitude')->nullable()->default('');
