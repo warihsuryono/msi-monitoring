@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             PrivilegeSeeder::class,
             UserSeeder::class,
             MainMenuSeeder::class,
+            AnalyzerValueSeeder::class,
         ]);
     }
 }

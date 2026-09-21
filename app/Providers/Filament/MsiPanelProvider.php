@@ -92,6 +92,7 @@ class MsiPanelProvider extends PanelProvider
             ])
             ->default()
             ->darkMode(false)
+            ->sidebarCollapsibleOnDesktop(true)
             ->id('msi')
             ->path('msi')
             ->favicon(asset('img/monitoring_msi_icon.png'))

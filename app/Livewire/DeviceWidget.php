@@ -57,7 +57,7 @@ class DeviceWidget extends StatsOverviewWidget
                 $value = $this->get_value($param->parameter_id);
                 $unit = $this->get_unit();
             } else {
-                $value = AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first();
+                $value = @AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first()->value;
                 $unit = $param->parameter->unit->name;
             }
 
