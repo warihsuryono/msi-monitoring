@@ -76,6 +76,7 @@ class MsiPanelProvider extends PanelProvider
                             ->label($mainmenu->name)
                             ->icon($mainmenu->icon)
                             ->items($navigations)
+                            ->collapsed(true)
                     );
                     $builder->groups($navigation_groups);
                     $navigation_groups = [];

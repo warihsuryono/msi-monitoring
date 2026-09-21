@@ -2,6 +2,8 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\Device;
+use App\Models\DeviceParameter;
 use BackedEnum;
 use Filament\Facades\Filament;
 use Filament\Pages\Page;
@@ -27,19 +29,21 @@ class Dashboard extends Page
 
     protected $name, $avatar;
 
+    public array $p_types = ['gas', 'particulate', 'liquid', 'flow', 'noise', 'weather'];
+    public array $i_param = [];
+
     public function mount()
     {
         $this->name = Auth::user()->name;
         $name = "";
         $splitName = explode(" ", $this->name);
-        if (count($splitName) == 1) {
-            $name = substr($this->name, 0, 1);
-        } else {
-            foreach ($splitName as $value) {
-                $name .= $value;
-            }
-        }
+        if (count($splitName) == 1) $name = substr($this->name, 0, 1);
+        else foreach ($splitName as $value) $name .= $value;
         $this->avatar = Auth::user()->photo ?? "https://ui-avatars.com/api/?name={$name}&color=FFFFFF&background=09090b";
+
+        foreach (Device::all() as $device)
+            foreach ($this->p_types as $p_type)
+                $this->i_param[$p_type][$device->id] = DeviceParameter::where('device_id', $device->id)->whereHas('parameter', fn($q) => $q->where('p_type', $p_type))->count();
     }
 
     public static function getNavigationLabel(): string
