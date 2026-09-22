@@ -45,10 +45,7 @@ class DeviceWidget extends StatsOverviewWidget
     protected function getStats(): array
     {
         $stats = [];
-
-        $device_parameters = DeviceParameter::where('device_id', $this->device_id)->whereHas('parameter', fn($q) => $q->where('p_type', $this->p_type))->get();
-
-        if (!$device_parameters) return [];
+        if (!$device_parameters = DeviceParameter::where('device_id', $this->device_id)->whereHas('parameter', fn($q) => $q->where('p_type', $this->p_type))->get()) return [];
 
         foreach ($device_parameters as $param) {
             $unit_state = (int) Device::find($this->device_id)->unit_state;
@@ -61,15 +58,11 @@ class DeviceWidget extends StatsOverviewWidget
 
             $stats[] = Stat::make(
                 $param->parameter_id,
-                new HtmlString(
-                    $value . " " .
-                        "<a class='fi-wi-stats-overview-stat-unit'>" . $unit . "</a>"
-                )
+                new HtmlString($value . " " . "<a class='fi-wi-stats-overview-stat-unit'>" . $unit . "</a>")
             )
                 ->label(new HtmlString("<p class='text-lg font-black'>" . $param->parameter->caption . "</p>"))
                 ->description(new HtmlString(""));
         }
-
         return $stats;
     }
 }

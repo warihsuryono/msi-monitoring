@@ -28,11 +28,12 @@ class Dashboard extends Page
 
     protected static ?int $navigationSort = -2;
 
-    protected $name, $avatar;
+    protected string $name, $avatar;
 
     public array $p_types = ['gas', 'particulate', 'liquid', 'flow', 'noise', 'weather'];
     public array $i_param = [];
     public array $last_update = [];
+    public object $devices;
 
     public function mount()
     {
@@ -42,11 +43,17 @@ class Dashboard extends Page
         if (count($splitName) == 1) $name = substr($this->name, 0, 1);
         else foreach ($splitName as $value) $name .= $value;
         $this->avatar = Auth::user()->photo ?? "https://ui-avatars.com/api/?name={$name}&color=FFFFFF&background=09090b";
-
-        foreach (Device::all() as $device)
+        foreach (Device::where('status', 0)->get() as $device) {
+            if ($analyzer_value = AnalyzerValue::where(['device_id' => $device->id])->latest('created_at')->first())
+                if ($analyzer_value->created_at->diffInMinutes(now()) <= 60) Device::find($device->id)->update(["status" => 1]);
+        }
+        $this->devices = Device::where('status', 1)->get();
+        foreach ($this->devices as $device)
             foreach ($this->p_types as $p_type) {
                 $this->i_param[$p_type][$device->id] = DeviceParameter::where('device_id', $device->id)->whereHas('parameter', fn($q) => $q->where('p_type', $p_type))->count();
-                $this->last_update[$device->id] = @AnalyzerValue::where(['device_id' => $device->id])->latest('id')->first()->created_at;
+                $this->last_update[$device->id] = @AnalyzerValue::where(['device_id' => $device->id])->latest('created_at')->first()->created_at;
+                if (!$this->last_update[$device->id]) Device::find($device->id)->update(["status" => 0]);
+                else if ($this->last_update[$device->id]->diffInMinutes(now()) > 60) Device::find($device->id)->update(["status" => 0]);
             }
     }
 

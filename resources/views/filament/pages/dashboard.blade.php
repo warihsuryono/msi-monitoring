@@ -7,7 +7,7 @@
 @if (Device::first())
     <x-filament-panels::page x-data="{ activeTab: 'device_{{ Device::first()->id }}' }">
         <x-filament::tabs>
-            @foreach (Device::all() as $device)
+            @foreach ($this->devices as $device)
                 <x-filament::tabs.item x-on:click="activeTab = 'device_{{ $device->id }}'"
                     alpine-active="activeTab === 'device_{{ $device->id }}'">
                     {{ $device->name }}
@@ -15,7 +15,7 @@
             @endforeach
         </x-filament::tabs>
 
-        @foreach (Device::all() as $device)
+        @foreach ($this->devices as $device)
             <div x-show="activeTab === 'device_{{ $device->id }}'">
                 @foreach ($this->p_types as $p_type)
                     @if ($this->i_param[$p_type][$device->id] > 0)
