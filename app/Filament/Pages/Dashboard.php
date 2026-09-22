@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\AnalyzerValue;
 use App\Models\Device;
 use App\Models\DeviceParameter;
 use BackedEnum;
@@ -31,6 +32,7 @@ class Dashboard extends Page
 
     public array $p_types = ['gas', 'particulate', 'liquid', 'flow', 'noise', 'weather'];
     public array $i_param = [];
+    public array $last_update = [];
 
     public function mount()
     {
@@ -42,8 +44,10 @@ class Dashboard extends Page
         $this->avatar = Auth::user()->photo ?? "https://ui-avatars.com/api/?name={$name}&color=FFFFFF&background=09090b";
 
         foreach (Device::all() as $device)
-            foreach ($this->p_types as $p_type)
+            foreach ($this->p_types as $p_type) {
                 $this->i_param[$p_type][$device->id] = DeviceParameter::where('device_id', $device->id)->whereHas('parameter', fn($q) => $q->where('p_type', $p_type))->count();
+                $this->last_update[$device->id] = @AnalyzerValue::where(['device_id' => $device->id])->latest('id')->first()->created_at;
+            }
     }
 
     public static function getNavigationLabel(): string

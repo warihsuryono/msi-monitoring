@@ -27,6 +27,9 @@
                         <div>@livewire(DeviceWidget::class, [$device->id, $p_type])</div>
                     @endif
                 @endforeach
+                <br>
+                Last Update :
+                {{ $this->last_update[$device->id] ? $this->last_update[$device->id]->format('d-m-Y H:i:s') : '' }}
             </div>
         @endforeach
     </x-filament-panels::page>

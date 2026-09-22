@@ -25,19 +25,16 @@ class DeviceWidget extends StatsOverviewWidget
         return 4;
     }
 
-    public function get_value($parameter_id)
+    public function get_value($parameter_id, $value, $unit_state)
     {
-        $value = round(@AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $parameter_id])->latest('id')->first()->value, 2);
-        $unit_state = (int) Device::find($this->device_id)->unit_state;
         $molecular_mass = (float) @Parameter::find($parameter_id)->first()->molecular_mass;
         if ($unit_state == 1 || $unit_state == 2) $value = round((24.45 * $value) / $molecular_mass, 3);
         if ($unit_state == 2) $value = round($value / 1000, 3);
         return $value;
     }
 
-    public function get_unit()
+    public function get_unit($unit_state)
     {
-        $unit_state = (int) Device::find($this->device_id)->unit_state;
         if ($unit_state == 0) return "µg/m<sup>3</sup>";
         if ($unit_state == 1) return "ppb";
         if ($unit_state == 2) return "ppm";
@@ -52,13 +49,12 @@ class DeviceWidget extends StatsOverviewWidget
         if (!$device_parameters) return [];
 
         foreach ($device_parameters as $param) {
-
+            $unit_state = (int) Device::find($this->device_id)->unit_state;
+            $value = @AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first()->value;
+            $unit = $param->parameter->unit->name;
             if ($this->p_type == 'gas') {
-                $value = $this->get_value($param->parameter_id);
-                $unit = $this->get_unit();
-            } else {
-                $value = @AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first()->value;
-                $unit = $param->parameter->unit->name;
+                $value = $this->get_value($param->parameter_id, $value, $unit_state);
+                $unit = $this->get_unit($unit_state);
             }
 
             $stats[] = Stat::make(
