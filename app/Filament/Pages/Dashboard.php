@@ -45,7 +45,7 @@ class Dashboard extends Page
         $this->avatar = Auth::user()->photo ?? "https://ui-avatars.com/api/?name={$name}&color=FFFFFF&background=09090b";
         foreach (Device::where('status', 0)->get() as $device) {
             if ($analyzer_value = AnalyzerValue::where(['device_id' => $device->id])->latest('created_at')->first())
-                if ($analyzer_value->created_at->diffInMinutes(now()) <= 60) Device::find($device->id)->update(["status" => 1]);
+                if ($analyzer_value->created_at->diffInMinutes(now()) <= 5) Device::find($device->id)->update(["status" => 1]);
         }
         $this->devices = Device::where('status', 1)->get();
         foreach ($this->devices as $device)
@@ -53,7 +53,7 @@ class Dashboard extends Page
                 $this->i_param[$p_type][$device->id] = DeviceParameter::where('device_id', $device->id)->whereHas('parameter', fn($q) => $q->where('p_type', $p_type))->count();
                 $this->last_update[$device->id] = @AnalyzerValue::where(['device_id' => $device->id])->latest('created_at')->first()->created_at;
                 if (!$this->last_update[$device->id]) Device::find($device->id)->update(["status" => 0]);
-                else if ($this->last_update[$device->id]->diffInMinutes(now()) > 60) Device::find($device->id)->update(["status" => 0]);
+                else if ($this->last_update[$device->id]->diffInMinutes(now()) > 5) Device::find($device->id)->update(["status" => 0]);
             }
     }
 
