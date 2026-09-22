@@ -13,19 +13,21 @@ use Illuminate\Support\HtmlString;
 class DeviceWidget extends StatsOverviewWidget
 {
     protected ?string $pollingInterval = '1s';
-    public $device_id;
-    public $p_type;
-    public function mount($device_id, $p_type): void
+    public int $device_id;
+    public string $p_type;
+
+    public function mount(int $device_id, string $p_type): void
     {
         $this->device_id = $device_id;
         $this->p_type = $p_type;
     }
+
     protected function getColumns(): int
     {
         return 4;
     }
 
-    public function get_value($parameter_id, $value, $unit_state)
+    public function get_value(int $parameter_id, float $value, int $unit_state)
     {
         $molecular_mass = (float) @Parameter::find($parameter_id)->first()->molecular_mass;
         if ($unit_state == 1 || $unit_state == 2) $value = round((24.45 * $value) / $molecular_mass, 3);
@@ -33,7 +35,7 @@ class DeviceWidget extends StatsOverviewWidget
         return $value;
     }
 
-    public function get_unit($unit_state)
+    public function get_unit(int $unit_state)
     {
         if ($unit_state == 0) return "µg/m<sup>3</sup>";
         if ($unit_state == 1) return "ppb";
@@ -50,7 +52,7 @@ class DeviceWidget extends StatsOverviewWidget
 
         foreach ($device_parameters as $param) {
             $unit_state = (int) Device::find($this->device_id)->unit_state;
-            $value = @AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first()->value;
+            $value = (float) @AnalyzerValue::where(['device_id' => $this->device_id, 'parameter_id' => $param->parameter_id])->latest('id')->first()->value;
             $unit = $param->parameter->unit->name;
             if ($this->p_type == 'gas') {
                 $value = $this->get_value($param->parameter_id, $value, $unit_state);
