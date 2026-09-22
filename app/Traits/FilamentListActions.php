@@ -4,9 +4,9 @@ namespace App\Traits;
 
 use App\Models\menu;
 use App\Http\Controllers\PrivilegeController;
-use Filament\Tables\Actions\EditAction;
+use Filament\Actions\EditAction;
 use Filament\Tables\Actions\ViewAction;
-use Filament\Tables\Actions\DeleteAction;
+use Filament\Actions\DeleteAction;
 
 trait FilamentListActions
 {
