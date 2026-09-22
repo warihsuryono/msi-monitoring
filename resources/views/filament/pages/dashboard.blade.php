@@ -4,8 +4,8 @@
     use App\Livewire\UnitToggle;
     use App\Models\Device;
 @endphp
-@if (Device::first())
-    <x-filament-panels::page x-data="{ activeTab: 'device_{{ Device::first()->id }}' }">
+@if ($this->devices->count() > 0)
+    <x-filament-panels::page x-data="{ activeTab: 'device_{{ $this->devices->first()->id }}' }">
         <x-filament::tabs>
             @foreach ($this->devices as $device)
                 <x-filament::tabs.item x-on:click="activeTab = 'device_{{ $device->id }}'"
@@ -35,5 +35,16 @@
     </x-filament-panels::page>
 @else
     <x-filament-panels::page>
+        <div class="flex items-center justify-center min-h-[60vh]">
+            <div class="text-center">
+                <h2 class="text-xl font-semibold text-danger-600">
+                    Device Tidak Ditemukan
+                </h2>
+
+                <p class="mt-2 text-gray-500">
+                    Data device yang Anda cari tidak tersedia.
+                </p>
+            </div>
+        </div>
     </x-filament-panels::page>
 @endif
