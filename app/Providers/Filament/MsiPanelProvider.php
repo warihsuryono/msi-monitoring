@@ -3,30 +3,30 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Pages\Dashboard;
-use Exception;
-use Filament\Panel;
 use App\Models\menu;
 use App\Models\Privilege;
+use Exception;
+use Filament\FontProviders\LocalFontProvider;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
+use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Auth;
-use Filament\Navigation\NavigationItem;
-use Filament\Navigation\NavigationGroup;
-use Filament\Http\Middleware\Authenticate;
-use Filament\Navigation\NavigationBuilder;
-use Filament\FontProviders\LocalFontProvider;
-use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 
 
 class MsiPanelProvider extends PanelProvider
@@ -113,6 +113,10 @@ class MsiPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets($widgets)
             ->globalSearch(false)
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn() => view('header')
+            )
             ->renderHook(
                 PanelsRenderHook::FOOTER,
                 fn() => view('footer')

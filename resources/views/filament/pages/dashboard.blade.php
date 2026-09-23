@@ -1,4 +1,3 @@
-@vite(['resources/css/app.css', 'resources/js/app.js'])
 @php
     use App\Livewire\DeviceWidget;
     use App\Livewire\UnitToggle;
