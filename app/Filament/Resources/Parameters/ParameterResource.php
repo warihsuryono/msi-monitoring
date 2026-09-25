@@ -5,9 +5,7 @@ namespace App\Filament\Resources\Parameters;
 use App\Filament\Resources\Parameters\Pages\CreateParameter;
 use App\Filament\Resources\Parameters\Pages\EditParameter;
 use App\Filament\Resources\Parameters\Pages\ListParameters;
-use App\Filament\Resources\Parameters\Pages\ViewParameter;
 use App\Filament\Resources\Parameters\Schemas\ParameterForm;
-use App\Filament\Resources\Parameters\Schemas\ParameterInfolist;
 use App\Filament\Resources\Parameters\Tables\ParametersTable;
 use App\Models\Parameter;
 use BackedEnum;
@@ -24,16 +22,11 @@ class ParameterResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $recordTitleAttribute = 'Parameter';
+    protected static ?string $recordTitleAttribute = 'parameter';
 
     public static function form(Schema $schema): Schema
     {
         return ParameterForm::configure($schema);
-    }
-
-    public static function infolist(Schema $schema): Schema
-    {
-        return ParameterInfolist::configure($schema);
     }
 
     public static function table(Table $table): Table
@@ -53,7 +46,6 @@ class ParameterResource extends Resource
         return [
             'index' => ListParameters::route('/'),
             'create' => CreateParameter::route('/create'),
-            'view' => ViewParameter::route('/{record}'),
             'edit' => EditParameter::route('/{record}/edit'),
         ];
     }

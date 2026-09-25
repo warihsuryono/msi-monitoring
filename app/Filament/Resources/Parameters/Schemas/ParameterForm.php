@@ -12,24 +12,22 @@ class ParameterForm
     {
         return $schema
             ->components([
-                TextInput::make('name'),
-                TextInput::make('caption'),
-                TextInput::make('p_type'),
-                Select::make('unit_id')
-                    ->relationship('unit', 'name')
-                    ->default(0),
-                TextInput::make('molecular_mass')
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('deleted_by')
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('created_by')
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('updated_by')
-                    ->numeric()
-                    ->default(0),
+                TextInput::make('name')->maxLength(255)->placeholder("NO2")->required(),
+                TextInput::make('caption')->maxLength(255)->required()->placeholder("NO2")->required(),
+                Select::make('p_type')
+                    ->label("Parameter Type")
+                    ->options([
+                        "gas" => "Gas",
+                        "particulate" => "Particulate",
+                        "liquid" => "Liquid",
+                        "weather" => "Weather",
+                        "emission" => "Emission",
+                        "flow" => "Flow",
+                        "noise" => "Noise"
+                    ])
+                    ->required(),
+                Select::make('unit_id')->label("Unit")->relationship('unit', 'name')->required(),
+                TextInput::make('molecular_mass')->numeric()->default(1)->required(),
             ]);
     }
 }
