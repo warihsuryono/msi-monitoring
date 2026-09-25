@@ -13,7 +13,7 @@ class DeviceForm
         return $schema
             ->components([
                 TextInput::make('name'),
-                TextInput::make('topic'),
+                TextInput::make('topic')->placeholder('msi/sensor/xxx'),
                 Select::make('device_type_id')->label("Type")->relationship('type', 'name')->required(),
                 TextInput::make('address'),
                 TextInput::make('latitude'),
