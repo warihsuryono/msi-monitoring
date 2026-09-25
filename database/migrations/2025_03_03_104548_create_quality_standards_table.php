@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('regulation_code')->nullable()->default('')->index('quality_standard_regulation_code');
             $table->unsignedBigInteger('parameter_id')->default(0)->nullable();
             $table->double('value')->nullable()->default(0);
-            $table->unsignedBigInteger('unit_id')->default(3)->nullable();
+            $table->unsignedBigInteger('unit_id')->default(4)->nullable();
             $table->unsignedBigInteger('deleted_by')->default(0)->nullable();
             $table->unsignedBigInteger('created_by')->default(0)->nullable();
             $table->unsignedBigInteger('updated_by')->default(0)->nullable();
