@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreignId('privilege_id')->constrained(table: 'privileges', indexName: 'users_privilege_id')->default(1);
             $table->string('email')->unique();
             $table->string('name');
-            $table->string('institution');
+            $table->string('institution')->default('');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('msisdn')->nullable();
