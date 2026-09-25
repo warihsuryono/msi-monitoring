@@ -24,7 +24,7 @@ class MainMenuSeeder extends Seeder
 
         menu::create(['id' => 7, 'seqno' => 1, 'parent_id' => 2, 'name' => 'Parameters', 'url' => 'parameters']);
         menu::create(['id' => 8, 'seqno' => 2, 'parent_id' => 2, 'name' => 'Quality Standards', 'url' => 'quality-standards']);
-        menu::create(['id' => 9, 'seqno' => 3, 'parent_id' => 2, 'name' => 'Devices Types', 'url' => 'device_types']);
+        menu::create(['id' => 9, 'seqno' => 3, 'parent_id' => 2, 'name' => 'Devices Types', 'url' => 'device-types']);
         menu::create(['id' => 10, 'seqno' => 4, 'parent_id' => 2, 'name' => 'Devices', 'url' => 'devices']);
 
         menu::create(['id' => 11, 'seqno' => 1, 'parent_id' => 3, 'name' => 'Menus', 'url' => 'menus']);
