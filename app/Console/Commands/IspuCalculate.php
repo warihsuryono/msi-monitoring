@@ -37,7 +37,7 @@ class IspuCalculate extends Command
 
         $ispudata = [];
         $sensors = DB::connection('msi_devel')
-            ->table('sensors')
+            ->table('Sensors')
             ->whereIn('sensor_name', [
                 'SO2',
                 'NO2',
