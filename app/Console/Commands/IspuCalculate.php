@@ -150,7 +150,7 @@ class IspuCalculate extends Command
         $ispuConvertions = DB::connection('msi_devel')->table('ispu_convertions')->orderBy("ispu_range_start")->get();
         $maxIspu = DB::connection('msi_devel')->table('ispu_convertions')->orderBy('ispu_range_start', 'desc')->first();
         if ($value >= $maxIspu->$parameter) {
-            return 300;
+            return 500;
         }
         $Ia = 50; //Ispu batas atas 
         $Ib = 0; // Ispu batas bawah
