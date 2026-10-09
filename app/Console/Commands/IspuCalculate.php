@@ -44,7 +44,6 @@ class IspuCalculate extends Command
                 'O3',
                 'CO',
                 'HC',
-                'NMHC',
                 'PM2.5',
                 'PM10',
             ])
@@ -84,7 +83,8 @@ class IspuCalculate extends Command
                 $ispu = $this->getIspu('co', $avg_value ?? 0.0);
                 $fieldname = "co";
             }
-            if ($sensor->sensor_name == 'HC' || $sensor->sensor_name == 'NMHC') {
+            // if ($sensor->sensor_name == 'HC' || $sensor->sensor_name == 'NMHC') {
+            if ($sensor->sensor_name == 'HC') {
                 $avg_value = $avg_value * 2290;
                 $ispu = $this->getIspu('hc', $avg_value ?? 0.0);
                 $fieldname = "hc";
