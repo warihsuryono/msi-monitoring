@@ -61,10 +61,10 @@ class IspuController extends Controller
             $cat_no2 = $this->IspuCategory($ispu->no2);
             $cat_hc = $this->IspuCategory($ispu->hc);
         }
-        $data["uppertext1"] = "PM2.5: " . $cat_pm25 . ", PM10: " . $cat_pm10 . ", SO2: " . $cat_so2 . ", CO: " . $cat_co;
-        $data["uppertext2"] = ", O3: " . $cat_o3 . ", NO2: " . $cat_no2 . ", HC: " . $cat_hc;
-        $data["lowertext1"] = "Stasiun " . $device_name . ": " . $datetime . " PM2.5:" . $data['PM2.5'] . " PM10:" . $data['PM10'] . " SO2:" . $data['SO2'];
-        $data["lowertext2"] = " CO:" . $data['CO'] . " O3:" . $data['O3'] . " NO2:" . $data['NO2'] . " HC:" . $data['HC'] . " SUHU:" . $data['Temperature'] . "C TEK:" . $data['Air Pressure'] . "mBar WS: " . $data['Wind Speed'] . "m/s WD:" . $data['Wind Direction'] . "deg";
+        $data["uppertext1"] = "PM2.5:" . $cat_pm25 . ", PM10:" . $cat_pm10 . ", SO2:" . $cat_so2 . ", ";
+        $data["uppertext2"] = "CO:" . $cat_co . ", O3:" . $cat_o3 . ", NO2:" . $cat_no2 . ", HC:" . $cat_hc;
+        $data["lowertext1"] = "Stasiun " . $device_name . ": " . $datetime . " ==> PM2.5:" . $data['PM2.5'] . "ug/m3, PM10:" . $data['PM10'] . "ug/m3, SO2:" . $data['SO2'] . "ppb, ";
+        $data["lowertext2"] = "CO:" . $data['CO'] . "ppm, O3:" . $data['O3'] . "ppb, NO2:" . $data['NO2'] . "ppb, HC:" . $data['HC'] . "ppm, SUHU:" . $data['Temperature'] . "C, TEK:" . $data['Air Pressure'] . "mBar, WS:" . $data['Wind Speed'] . "m/s, WD:" . $data['Wind Direction'] . "deg";
 
 
         if (!$data) {
