@@ -18,6 +18,21 @@ class IspuController extends Controller
         if ($sensors) foreach ($sensors as $sensor)
             $data[$sensor->sensor_name] = DB::connection('msi_devel')->table('Sensor_logs')->where('sensor_id', $sensor->id)->orderByDesc('timestamp')->first()->value ?? 0;
 
+        $ispu = DB::connection('msi_devel')->table('ispu')->where('device_id', $device_id)->orderByDesc('start_at')->first();
+        if ($ispu) {
+            $data['ispu']['date'] = date('d/m/Y H:i', strtotime($ispu->start_at)) . " s/d " . date('d/m/Y H:i', strtotime($ispu->end_at));
+            $data['ispu']['pm25'] = $ispu->pm25;
+            $data['ispu']['pm10'] = $ispu->pm10;
+            $data['ispu']['so2'] = $ispu->so2;
+            $data['ispu']['co'] = $ispu->co;
+            $data['ispu']['o3'] = $ispu->o3;
+            $data['ispu']['no2'] = $ispu->no2;
+            $data['ispu']['hc'] = $ispu->hc;
+            $data['ispu']['higest_param'] = $ispu->higest_param;
+            $data['ispu']['higest_ispu'] = $ispu->higest_ispu;
+            $data['ispu']['description'] = $ispu->description;
+        }
+
 
         if (!$data) {
             return response()->json([
