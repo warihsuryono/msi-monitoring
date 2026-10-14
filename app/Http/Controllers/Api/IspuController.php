@@ -14,12 +14,12 @@ class IspuController extends Controller
     public function index(int $device_id)
     {
         $data = DB::connection('msi_devel')
-            ->table('sensors as sd')
-            ->join('sensor_logs as sl', 'sd.id', '=', 'sl.sensor_id')
+            ->table('Sensors as sd')
+            ->join('Sensor_logs as sl', 'sd.id', '=', 'sl.sensor_id')
             ->where('sd.Device_id', $device_id)
             ->whereRaw('sl.id = (
                 SELECT sl2.id
-                FROM sensor_logs sl2
+                FROM Sensor_logs sl2
                 WHERE sl2.sensor_id = sl.sensor_id
                 ORDER BY sl2.timestamp DESC, sl2.id DESC
                 LIMIT 1
