@@ -13,24 +13,11 @@ class IspuController extends Controller
      */
     public function index(int $device_id)
     {
-        $data = DB::connection('msi_devel')
-            ->table('Sensors as sd')
-            ->join('Sensor_logs as sl', 'sd.id', '=', 'sl.sensor_id')
-            ->where('sd.Device_id', $device_id)
-            ->whereRaw('sl.id = (
-                SELECT sl2.id
-                FROM Sensor_logs sl2
-                WHERE sl2.sensor_id = sl.sensor_id
-                ORDER BY sl2.timestamp DESC, sl2.id DESC
-                LIMIT 1
-            )')
-            ->select('sd.sensor_name', 'sl.value', 'sl.timestamp')
-            ->orderByDesc('sl.timestamp')
-            ->get()
-            ->unique('sensor_name')
-            ->mapWithKeys(fn($item) => [
-                strtolower($item->sensor_name) => (float) $item->value,
-            ]);
+        $data = null;
+        $sensors = DB::connection('msi_devel')->table('Sensors')->where('Device_id', $device_id)->orderBy('id')->get();
+        if ($sensors) foreach ($sensors as $sensor)
+            $data[$sensor->sensor_name] = DB::connection('msi_devel')->table('Sensor_logs')->where('sensor_id', $sensor->id)->orderByDesc('timestamp')->first()->value ?? 0;
+
 
         if (!$data) {
             return response()->json([
