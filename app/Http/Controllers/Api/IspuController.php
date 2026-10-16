@@ -52,7 +52,7 @@ class IspuController extends Controller
             $data['ispu']['hc'] = $ispu->hc;
             $data['ispu']['higest_param'] = $ispu->higest_param;
             $data['ispu']['higest_ispu'] = $ispu->higest_ispu;
-            $data['ispu']['description'] = $ispu->description;
+            $data['ispu']['description'] = strtoupper($ispu->description);
             $cat_pm25 = $this->IspuCategory($ispu->pm25);
             $cat_pm10 = $this->IspuCategory($ispu->pm10);
             $cat_so2 = $this->IspuCategory($ispu->so2);
