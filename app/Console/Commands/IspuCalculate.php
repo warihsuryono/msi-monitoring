@@ -27,13 +27,14 @@ class IspuCalculate extends Command
      */
     public function handle()
     {
-        $cutoff = Carbon::today()->setTime(15, 0, 0);
+        $cutoff = Carbon::today('Asia/Jakarta')->setTime(15, 0, 0);
         $start = Carbon::yesterday()->setTime(15, 0, 0);
         $end   = $cutoff;
         if (Carbon::now()->lessThan($cutoff)) {
-            $start = Carbon::today()->subDays(2)->setTime(15, 0, 0);
+            $start = Carbon::today('Asia/Jakarta')->subDays(2)->setTime(15, 0, 0);
             $end   = Carbon::yesterday()->setTime(15, 0, 0);
         }
+        $this->info("ISPU DATE : " . $start . " - " . $end);
 
         $ispudata = [];
         $sensors = DB::connection('msi_devel')
