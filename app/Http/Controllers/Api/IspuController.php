@@ -32,6 +32,7 @@ class IspuController extends Controller
             $data[$sensor->sensor_name] = DB::connection('msi_devel')->table('Sensor_logs')->where('sensor_id', $sensor->id)->orderByDesc('timestamp')->first()->value ?? 0;
 
         if (!@$data['HC']) $data['HC'] = 0;
+        if (!@$data['SO2']) $data['SO2'] = 0;
         $data['Temperature'] = number_format((float) $data['Temperature'] * 0.1, 1, '.', '');
         $ispu = DB::connection('msi_devel')->table('ispu')->where('device_id', $device_id)->orderByDesc('start_at')->first();
         $cat_pm25 = " ";
