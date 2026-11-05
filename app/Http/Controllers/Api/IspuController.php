@@ -22,45 +22,83 @@ class IspuController extends Controller
      */
     public function index(int $device_id)
     {
-        $data = null;
-        $device_name = DB::connection('msi_devel')->table('Devices')->find($device_id)->device_name ?? '';
-        $data['device_name'] = $device_name;
         $datetime = Carbon::now()->locale('id')->roundMinute(10)->translatedFormat('d M Y H:i');
-        $data['datetime'] = $datetime;
-        $sensors = DB::connection('msi_devel')->table('Sensors')->where('Device_id', $device_id)->orderBy('id')->get();
-        if ($sensors) foreach ($sensors as $sensor)
-            $data[$sensor->sensor_name] = DB::connection('msi_devel')->table('Sensor_logs')->where('sensor_id', $sensor->id)->orderByDesc('timestamp')->first()->value ?? 0;
+        if ($device_id != 9999) {
+            $data = null;
+            $device_name = DB::connection('msi_devel')->table('Devices')->find($device_id)->device_name ?? '';
+            $data['device_name'] = $device_name;
+            $data['datetime'] = $datetime;
+            $sensors = DB::connection('msi_devel')->table('Sensors')->where('Device_id', $device_id)->orderBy('id')->get();
+            if ($sensors) foreach ($sensors as $sensor)
+                $data[$sensor->sensor_name] = DB::connection('msi_devel')->table('Sensor_logs')->where('sensor_id', $sensor->id)->orderByDesc('timestamp')->first()->value ?? 0;
 
-        if (!@$data['HC']) $data['HC'] = 0;
-        if (!@$data['SO2']) $data['SO2'] = 0;
-        $data['Temperature'] = number_format((float) $data['Temperature'] * 0.1, 1, '.', '');
-        $ispu = DB::connection('msi_devel')->table('ispu')->where('device_id', $device_id)->orderByDesc('start_at')->first();
-        $cat_pm25 = " ";
-        $cat_pm10 = " ";
-        $cat_so2 = " ";
-        $cat_co = " ";
-        $cat_o3 = " ";
-        $cat_no2 = " ";
-        $cat_hc = " ";
-        if ($ispu) {
-            $data['ispu']['date'] = date('d/m/Y H:i', strtotime($ispu->start_at)) . " s/d " . date('d/m/Y H:i', strtotime($ispu->end_at));
-            $data['ispu']['pm25'] = $ispu->pm25;
-            $data['ispu']['pm10'] = $ispu->pm10;
-            $data['ispu']['so2'] = $ispu->so2;
-            $data['ispu']['co'] = $ispu->co;
-            $data['ispu']['o3'] = $ispu->o3;
-            $data['ispu']['no2'] = $ispu->no2;
-            $data['ispu']['hc'] = $ispu->hc;
-            $data['ispu']['higest_param'] = $ispu->higest_param;
-            $data['ispu']['higest_ispu'] = $ispu->higest_ispu;
-            $data['ispu']['description'] = strtoupper($ispu->description);
-            $cat_pm25 = $this->IspuCategory($ispu->pm25);
-            $cat_pm10 = $this->IspuCategory($ispu->pm10);
-            $cat_so2 = $this->IspuCategory($ispu->so2);
-            $cat_co = $this->IspuCategory($ispu->co);
-            $cat_o3 = $this->IspuCategory($ispu->o3);
-            $cat_no2 = $this->IspuCategory($ispu->no2);
-            $cat_hc = $this->IspuCategory($ispu->hc);
+            if (!@$data['HC']) $data['HC'] = 0;
+            if (!@$data['SO2']) $data['SO2'] = 0;
+            $data['Temperature'] = number_format((float) $data['Temperature'] * 0.1, 1, '.', '');
+            $ispu = DB::connection('msi_devel')->table('ispu')->where('device_id', $device_id)->orderByDesc('start_at')->first();
+            $cat_pm25 = " ";
+            $cat_pm10 = " ";
+            $cat_so2 = " ";
+            $cat_co = " ";
+            $cat_o3 = " ";
+            $cat_no2 = " ";
+            $cat_hc = " ";
+            if ($ispu) {
+                $data['ispu']['date'] = date('d/m/Y H:i', strtotime($ispu->start_at)) . " s/d " . date('d/m/Y H:i', strtotime($ispu->end_at));
+                $data['ispu']['pm25'] = $ispu->pm25;
+                $data['ispu']['pm10'] = $ispu->pm10;
+                $data['ispu']['so2'] = $ispu->so2;
+                $data['ispu']['co'] = $ispu->co;
+                $data['ispu']['o3'] = $ispu->o3;
+                $data['ispu']['no2'] = $ispu->no2;
+                $data['ispu']['hc'] = $ispu->hc;
+                $data['ispu']['higest_param'] = $ispu->higest_param;
+                $data['ispu']['higest_ispu'] = $ispu->higest_ispu;
+                $data['ispu']['description'] = strtoupper($ispu->description);
+                $cat_pm25 = $this->IspuCategory($ispu->pm25);
+                $cat_pm10 = $this->IspuCategory($ispu->pm10);
+                $cat_so2 = $this->IspuCategory($ispu->so2);
+                $cat_co = $this->IspuCategory($ispu->co);
+                $cat_o3 = $this->IspuCategory($ispu->o3);
+                $cat_no2 = $this->IspuCategory($ispu->no2);
+                $cat_hc = $this->IspuCategory($ispu->hc);
+            }
+        } else {
+            $device_name = 'STASIUN TESTING';
+            $data['device_name'] = $device_name;
+            $data['datetime'] = $datetime;
+            $sensors = DB::connection('msi_devel')->table('Sensors')->where('Device_id', $device_id)->orderBy('id')->get();
+            $data['NO2'] = 39;
+            $data['SO2'] = 34;
+            $data['O3'] = 3;
+            $data['CO'] = 0.003;
+            $data['HC'] = 12;
+            $data['PM2.5'] = 31;
+            $data['PM10'] = 41;
+            $data['TSP'] = 54;
+            $data['Temperature'] = 30.6;
+            $data['Humidity'] = 73;
+            $data['Air Pressure'] = 1004.3;
+            $data['Wind Speed'] = 1.2;
+            $data['Wind Direction'] = 340;
+            $cat_pm25 = "BAIK";
+            $cat_pm10 = "BAIK";
+            $cat_so2 = "SEDANG";
+            $cat_co = "SEDANG";
+            $cat_o3 = "TIDAK SEHAT";
+            $cat_no2 = "TIDAK SEHAT";
+            $cat_hc = "BERBAHAYA";
+            $data['ispu']['date'] = Carbon::now()->format('d/m/Y') . " 15:00 s/d " . Carbon::now()->addDay()->format('d/m/Y') . " 15:00";
+            $data['ispu']['pm25'] = 50;
+            $data['ispu']['pm10'] = 100;
+            $data['ispu']['so2'] = 150;
+            $data['ispu']['co'] = 200;
+            $data['ispu']['o3'] = 250;
+            $data['ispu']['no2'] = 300;
+            $data['ispu']['hc'] = 400;
+            $data['ispu']['higest_param'] = 'HC';
+            $data['ispu']['higest_ispu'] = 400;
+            $data['ispu']['description'] = 'BERBAHAYA';
         }
         $data["uppertext1"] = "PM2.5:" . $cat_pm25 . ", PM10:" . $cat_pm10 . ", SO2:" . $cat_so2 . ", ";
         $data["uppertext2"] = "CO:" . $cat_co . ", O3:" . $cat_o3 . ", NO2:" . $cat_no2 . ", HC:" . $cat_hc;
