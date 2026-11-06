@@ -89,15 +89,15 @@ class IspuController extends Controller
             $cat_no2 = "TIDAK SEHAT";
             $cat_hc = "BERBAHAYA";
             $data['ispu']['date'] = Carbon::now()->format('d/m/Y') . " 15:00 s/d " . Carbon::now()->addDay()->format('d/m/Y') . " 15:00";
-            $data['ispu']['pm25'] = 50;
-            $data['ispu']['pm10'] = 100;
-            $data['ispu']['so2'] = 150;
-            $data['ispu']['co'] = 200;
-            $data['ispu']['o3'] = 250;
-            $data['ispu']['no2'] = 300;
-            $data['ispu']['hc'] = 400;
-            $data['ispu']['higest_param'] = 'HC';
-            $data['ispu']['higest_ispu'] = 400;
+            $data['ispu']['pm10'] = 480;
+            $data['ispu']['pm25'] = 400;
+            $data['ispu']['so2'] = 300;
+            $data['ispu']['co'] = 250;
+            $data['ispu']['o3'] = 200;
+            $data['ispu']['no2'] = 100;
+            $data['ispu']['hc'] = 50;
+            $data['ispu']['higest_param'] = 'PM10';
+            $data['ispu']['higest_ispu'] = 480;
             $data['ispu']['description'] = 'BERBAHAYA';
         }
         $data["uppertext1"] = "PM2.5:" . $cat_pm25 . ", PM10:" . $cat_pm10 . ", SO2:" . $cat_so2 . ", ";
