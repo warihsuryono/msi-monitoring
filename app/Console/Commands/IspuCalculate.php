@@ -117,6 +117,7 @@ class IspuCalculate extends Command
         foreach ($ispudata as $device_id => $_ispudata) {
             DB::connection('msi_devel')->table('ispu')->where(['device_id' => $device_id, 'start_at' => $_ispudata['start_at'], 'end_at' => $_ispudata['end_at']])->delete();
 
+            $is_outdoor = DB::connection('msi_devel')->table('Devices')->find($device_id)->is_outdoor ?? 0;
             DB::connection('msi_devel')
                 ->table('ispu')
                 ->insert([
@@ -141,6 +142,7 @@ class IspuCalculate extends Command
                     'higest_avg'    => $_ispudata['higest_avg'],
                     'higest_ispu'   => $_ispudata['higest_ispu'],
                     'description'   => $this->getIspuStatus($_ispudata['higest_ispu']),
+                    'is_outdoor'    => $is_outdoor,
                 ]);
         }
     }
