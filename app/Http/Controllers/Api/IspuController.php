@@ -35,7 +35,7 @@ class IspuController extends Controller
             if (!@$data['HC']) $data['HC'] = 0;
             if (!@$data['SO2']) $data['SO2'] = 0;
             $data['Temperature'] = number_format((float) $data['Temperature'] * 0.1, 1, '.', '');
-            $ispu = DB::connection('msi_devel')->table('ispu')->where('device_id', $device_id)->orderByDesc('start_at')->first();
+            $ispu = DB::connection('msi_devel')->table('ispu')->where('device_id', $device_id)->where('is_outdoor', 1)->orderByDesc('start_at')->first();
             $cat_pm25 = " ";
             $cat_pm10 = " ";
             $cat_so2 = " ";
