@@ -22,7 +22,7 @@ class IspuController extends Controller
      */
     public function index(int $device_id)
     {
-        $datetime = Carbon::now()->locale('id')->roundMinute(10)->translatedFormat('d M Y H:i');
+        $datetime = Carbon::now()->locale('id')->floorMinute(10)->translatedFormat('d M Y H:i');
         if ($device_id != 9999) {
             $data = null;
             $device_name = DB::connection('msi_devel')->table('Devices')->find($device_id)->device_name ?? '';
