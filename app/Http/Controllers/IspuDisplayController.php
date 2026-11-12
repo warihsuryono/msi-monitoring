@@ -95,9 +95,30 @@ class IspuDisplayController extends Controller
             $mainParameter = '-';
         }
 
+
+        $data = null;
+        $sensors = DB::connection('msi_devel')->table('Sensors')->where('Device_id', $deviceId)->orderBy('id')->get();
+        if ($sensors) foreach ($sensors as $sensor)
+            $data[$sensor->sensor_name] = DB::connection('msi_devel')->table('Sensor_logs')->where('sensor_id', $sensor->id)->orderByDesc('timestamp')->first()->value ?? 0;
+
+        if (!@$data['NO2']) $data['NO2'] = 0;
+        if (!@$data['SO2']) $data['SO2'] = 0;
+        if (!@$data['O3']) $data['O3'] = 0;
+        if (!@$data['CO']) $data['CO'] = 0;
+        if (!@$data['HC']) $data['HC'] = 0;
+        if (!@$data['PM2.5']) $data['PM2.5'] = 0;
+        if (!@$data['PM10']) $data['PM10'] = 0;
+        if (!@$data['TSP']) $data['TSP'] = 0;
+        if (!@$data['Temperature']) $data['Temperature'] = 0;
+        if (!@$data['Humidity']) $data['Humidity'] = 0;
+        if (!@$data['Air Pressure']) $data['Air Pressure'] = 0;
+        if (!@$data['Wind Speed']) $data['Wind Speed'] = 0;
+        if (!@$data['Wind Direction']) $data['Wind Direction'] = 0;
+        $data['Temperature'] = number_format((float) $data['Temperature'] * 0.1, 1, '.', '');
+
         return [
             'deviceId' => $deviceId,
-            'location' => config("ispu_display.locations.{$deviceId}", "AQMS Device #{$deviceId}"),
+            'location' => DB::connection('msi_devel')->table('Devices')->find($deviceId)->device_name ?? config("ispu_display.locations.{$deviceId}", "AQMS Device #{$deviceId}"),
             'mainValue' => $this->formatNumber($mainValue),
             'mainParameter' => $mainParameter,
             'category' => $category['name'],
@@ -111,9 +132,9 @@ class IspuDisplayController extends Controller
             'parameters' => $parameters,
             // Kolom meteorologi tidak tersedia pada struktur tabel ispu yang diberikan.
             'weather' => [
-                'humidity' => null,
-                'pressure' => null,
-                'temperature' => null,
+                'humidity' => $data['Humidity'],
+                'pressure' => $data['Air Pressure'],
+                'temperature' => $data['Temperature'],
             ],
         ];
     }
