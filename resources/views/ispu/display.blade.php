@@ -267,7 +267,7 @@
         .bar-column {
             position: relative;
             min-width: 0;
-            height: 91%;
+            height: 90%;
         }
 
         .bar-track {

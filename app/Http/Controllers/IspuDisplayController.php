@@ -80,13 +80,19 @@ class IspuDisplayController extends Controller
         $parameters = [];
         foreach ($rawValues as $key => $value) {
             $number = is_numeric($value) ? (float) $value : 0.0;
+
+            if ($number > 300) $height = $this->mapValue($number, 301, 500, 78, 96);
+            else if ($number > 100) $height = $this->mapValue($number, 101, 300, 39, 77);
+            else $height = $this->mapValue($number, 0, 100, 0, 38);
+
             $parameters[$key] = [
                 'label' => $parameterLabels[$key],
                 'value' => $number,
                 'display' => $this->formatNumber($number),
                 'color' => $this->categoryFor($number)['color'],
                 // Skala tetap 0–500 agar seluruh parameter dapat dibandingkan.
-                'height' => min(100, max(0, ($number / 500) * 100)),
+                // 'height' => min(100, max(0, ($number / 500) * 100)),
+                'height' => $height,
             ];
         }
 
@@ -200,5 +206,10 @@ class IspuDisplayController extends Controller
     private function formatNumber(float $value): string
     {
         return rtrim(rtrim(number_format($value, 1, ',', '.'), '0'), ',');
+    }
+
+    public function mapValue(int $value, int $fromLow, int $fromHigh, int $toLow, int $toHigh)
+    {
+        return ($value - $fromLow) * ($toHigh - $toLow) / ($fromHigh - $fromLow) + $toLow;
     }
 }
