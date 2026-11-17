@@ -6,6 +6,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indeks Standar Pencemar Udara</title>
     <style>
+        /* CSS yang berlaku untuk layar dan print */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Pengaturan khusus saat print */
+        @media print {
+
+            @page {
+                size: A4;
+                margin: 5mm;
+            }
+
+            html,
+            body {
+                width: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            /* Hindari elemen terpotong */
+            .container,
+            .container-fluid {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+
+            /* Pertahankan warna tabel */
+            table,
+            th,
+            td {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Sembunyikan tombol yang tidak perlu dicetak */
+            .no-print {
+                display: none !important;
+            }
+        }
+
+
         :root {
             --page: #e9f8f0;
             --ink: #17231d;
