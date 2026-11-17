@@ -44,6 +44,8 @@ class IspuController extends Controller
             $cat_no2 = " ";
             $cat_hc = " ";
             if ($ispu) {
+                if (date('Y-m-d', strtotime($ispu->start_at)) != date('Y-m-d') && date('Y-m-d', strtotime($ispu->end_at)) != date('Y-m-d'))
+                    $datetime = date('d/m/Y H:i', strtotime($ispu->start_at)) . " s/d " . date('d/m/Y H:i', strtotime($ispu->end_at));
                 $data['ispu']['date'] = date('d/m/Y H:i', strtotime($ispu->start_at)) . " s/d " . date('d/m/Y H:i', strtotime($ispu->end_at));
                 $data['ispu']['pm25'] = $ispu->pm25;
                 $data['ispu']['pm10'] = $ispu->pm10;
