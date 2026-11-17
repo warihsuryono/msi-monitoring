@@ -531,7 +531,7 @@
 
         <section class="hero">
             <div class="quality">
-                <div class="quality-icon" id="statusIcon" aria-hidden="true">{{ $data['statusIcon'] }}</div>
+                <div xclass="quality-icon" id="statusIcon" aria-hidden="true"><img src="{{ $data['statusIcon'] }}"></div>
                 <div class="quality-label" id="statusTitle">{{ $data['statusTitle'] }}</div>
             </div>
             <div class="main-index" id="mainIndex" style="background: {{ $data['categoryColor'] }}">

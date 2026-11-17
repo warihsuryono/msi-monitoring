@@ -151,7 +151,7 @@ class IspuDisplayController extends Controller
         if ($value <= 50) {
             return [
                 'name' => 'Baik',
-                'icon' => '😊',
+                'icon' => '/img/face_baik.jpeg',
                 'color' => '#08ad50',
                 'impact' => 'Tingkat kualitas udara sangat baik dan tidak memberikan efek negatif terhadap kesehatan manusia, hewan, maupun tumbuhan.',
             ];
@@ -160,7 +160,7 @@ class IspuDisplayController extends Controller
         if ($value <= 100) {
             return [
                 'name' => 'Sedang',
-                'icon' => '🙂',
+                'icon' => '/img/face_sedang.jpeg',
                 'color' => '#0878bd',
                 'impact' => 'Kualitas udara masih dapat diterima. Namun, sebagian kecil kelompok yang sensitif dapat mengalami dampak kesehatan.',
             ];
@@ -169,7 +169,7 @@ class IspuDisplayController extends Controller
         if ($value <= 200) {
             return [
                 'name' => 'Tidak Sehat',
-                'icon' => '😐',
+                'icon' => '/img/face_tidak_sehat.jpeg',
                 'color' => '#ffe500',
                 'impact' => 'Kualitas udara dapat merugikan kesehatan kelompok sensitif dan dapat memengaruhi kelompok masyarakat lainnya.',
             ];
@@ -178,7 +178,7 @@ class IspuDisplayController extends Controller
         if ($value <= 300) {
             return [
                 'name' => 'Sangat Tidak Sehat',
-                'icon' => '☹',
+                'icon' => '/img/face_sangat_tidak_sehat.jpeg',
                 'color' => '#ef3027',
                 'impact' => 'Tingkat kualitas udara dapat meningkatkan risiko kesehatan pada sejumlah segmen populasi yang terpapar.',
             ];
@@ -186,7 +186,7 @@ class IspuDisplayController extends Controller
 
         return [
             'name' => 'Berbahaya',
-            'icon' => '😷',
+            'icon' => '/img/face_berbahaya.jpeg',
             'color' => '#111111',
             'impact' => 'Kualitas udara berada pada tingkat berbahaya. Kondisi ini dapat berdampak serius terhadap kesehatan masyarakat.',
         ];
