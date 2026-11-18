@@ -51,6 +51,8 @@ class IspuCalculate extends Command
             ->get();
 
         foreach ($sensors as $sensor) {
+            $is_ispu_status = false;
+            $ispu_status = DB::connection('msi_devel')->table('Devices')->find($sensor->device_id)->ispu_status ?? 0;
             $this->info($sensor->device_id . ":" . $sensor->sensor_name . ":");
             $avg_value = DB::connection('msi_devel')
                 ->table('Sensor_logs')
@@ -68,35 +70,42 @@ class IspuCalculate extends Command
                 $avg_value = $avg_value * 2.619;
                 $ispu = $this->getIspu('so2', $avg_value ?? 0.0);
                 $fieldname = "so2";
+                if ($ispu_status == 0 || $ispu_status == 2) $is_ispu_status = true;
             }
             if ($sensor->sensor_name == 'NO2') {
                 $avg_value = $avg_value * 1.881;
                 $ispu = $this->getIspu('no2', $avg_value ?? 0.0);
                 $fieldname = "no2";
+                if ($ispu_status == 0 || $ispu_status == 2) $is_ispu_status = true;
             }
             if ($sensor->sensor_name == 'O3') {
                 $avg_value = $avg_value * 1.962;
                 $ispu = $this->getIspu('o3', $avg_value ?? 0.0);
                 $fieldname = "o3";
+                if ($ispu_status == 0 || $ispu_status == 2) $is_ispu_status = true;
             }
             if ($sensor->sensor_name == 'CO') {
                 $avg_value = $avg_value * 1145.085;
                 $ispu = $this->getIspu('co', $avg_value ?? 0.0);
                 $fieldname = "co";
+                if ($ispu_status == 0 || $ispu_status == 2) $is_ispu_status = true;
             }
             // if ($sensor->sensor_name == 'HC' || $sensor->sensor_name == 'NMHC') {
             if ($sensor->sensor_name == 'HC') {
                 $avg_value = $avg_value * 2290;
                 $ispu = $this->getIspu('hc', $avg_value ?? 0.0);
                 $fieldname = "hc";
+                if ($ispu_status == 0 || $ispu_status == 2) $is_ispu_status = true;
             }
             if ($sensor->sensor_name == 'PM2.5') {
                 $ispu = $this->getIspu('pm25', $avg_value ?? 0.0);
                 $fieldname = "pm25";
+                if ($ispu_status == 0 || $ispu_status == 1) $is_ispu_status = true;
             }
             if ($sensor->sensor_name == 'PM10') {
                 $ispu = $this->getIspu('pm10', $avg_value ?? 0.0);
                 $fieldname = "pm10";
+                if ($ispu_status == 0 || $ispu_status == 1) $is_ispu_status = true;
             }
 
             $ispudata[$sensor->device_id]['start_at'] = $start->format('Y-m-d H:i:s');
@@ -107,7 +116,7 @@ class IspuCalculate extends Command
             if (!@$ispudata[$sensor->device_id]['higest_param']) $ispudata[$sensor->device_id]['higest_param'] = "";
             if (!@$ispudata[$sensor->device_id]['higest_avg']) $ispudata[$sensor->device_id]['higest_avg'] = 0;
             if (!@$ispudata[$sensor->device_id]['higest_ispu']) $ispudata[$sensor->device_id]['higest_ispu'] = 0;
-            if ($ispu > $ispudata[$sensor->device_id]['higest_ispu']) {
+            if ($ispu > $ispudata[$sensor->device_id]['higest_ispu'] && $is_ispu_status) {
                 $ispudata[$sensor->device_id]['higest_param'] = $sensor->sensor_name;
                 $ispudata[$sensor->device_id]['higest_avg'] = $avg_value;
                 $ispudata[$sensor->device_id]['higest_ispu'] = $ispu;
